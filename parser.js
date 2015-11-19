@@ -39,23 +39,36 @@ var keyWord =
 	while:true
 };
 
+var global = new scopeNode("Global");
+var currentScope = global;
+
+function scopeNode(name){
+	this.parent = currentScope;
+	this.name = name;
+	this.data = null;
+	this.child = null;
+	this.bracketStack = null;
+}
+
+
+
 function parseLine(line)
 {
 	var tokens = line.split(" ");
+	var colorChange;
+	var j = 0;
+
 	var i;
 	for(i = 0; i < tokens.length; i++)
 	{
 		if(keyWord[tokens[i]])
-			console.log("Keyword");
-		if(type[tokens[i]])
-		    console.log("Type");
+			colorChange[i] = 1;
+		else if(type[tokens[i]])
+		    colorChange[i] = 2;
+		else
+			colorChange[] = 0;
 	}
 }
-
-parseLine("int test = 45;");
-
-
-
 
 
 
