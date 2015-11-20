@@ -1,4 +1,3 @@
-
 var type = 
 {
 	char:true,
@@ -11,7 +10,6 @@ var type =
 	union:true,
 	unsigned:true,
 	void:true,
-	struct:true
 };
 var keyWord = 
 {
@@ -39,36 +37,82 @@ var keyWord =
 	while:true
 };
 
-var global = new scopeNode("Global");
-var currentScope = global;
-
-function scopeNode(name){
-	this.parent = currentScope;
-	this.name = name;
-	this.data = null;
-	this.child = null;
-	this.bracketStack = null;
-}
-
-
-
-function parseLine(line)
+var number =
 {
-	var tokens = line.split(" ");
-	var colorChange;
-	var j = 0;
+	'0':true,
+	'1':true,
+	'2':true,
+	'3':true,
+	'4':true,
+	'5':true,
+	'6':true,
+	'7':true,
+	'8':true,
+	'9':true
+};
 
-	var i;
-	for(i = 0; i < tokens.length; i++)
-	{
-		if(keyWord[tokens[i]])
-			colorChange[i] = 1;
-		else if(type[tokens[i]])
-		    colorChange[i] = 2;
-		else
-			colorChange[] = 0;
-	}
+var breakCharacter=
+{
+	'=':true,
+	'+':true,
+	'-':true,
+	'*':true,
+	'/':true,
+	'%':true,
+	'(':true,
+	')':true,
+	'{':true,
+	'}':true,
+	'[':true,
+	']':true,
+	'&':true,
+	'|':true,
+	'!':true,
+	'#':true,
+	'\"':true,
+	'\'':true,
+	' ':true
+};
+
+var dataArray;
+var buffer;
+var StopParse = 0;
+var currentWord;
+
+var currentIndex = 0;
+var currentLine = 0;
+
+function Word(startInd, len, color)
+{
+	this.startIndex = startInd;
+	this.length = len;
+	this.color = color;
 }
+
+function parseChar(c)
+{
+	if(breakCharacter[c])
+	{
+		if(keyWord[buffer])
+		{
+			buffer="";
+			return 2;
+		}
+		else if(type[buffer])
+		{
+			buffer="";
+			return 3;
+		}
+	}
+
+	buffer.push(c);
+
+	if(number[c])
+		return 1;
+
+	return 0;
+}
+
 
 
 
