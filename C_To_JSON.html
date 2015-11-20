@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>javascript</title>
+	<script type="text/javascript" src="javascript/rsa.js"></script>
+	<script type="text/javascript" src="<?= \RSA\JavascriptHelper::getFrontendUrl(); ?>"></script>
+                
+</head>
+<body>
+
+	<div class = "container">
+
+	<form name="user" action="<?php back.php ?>" method="POST">
+		Message: <input type = "text" id="bitch" onclick="encrypt" name = "text" />
+
+		<input type = "submit" />
+	</form> 
+
+	</div>
+
+	<script>	
+
+		var C_Str_Library = "#include<stdio.h> \n";
+		var C_Str_Code = "main(){printf(\"Hello World\");}";
+		var jsonString = JSON.stringify( { "library" : [C_Str_Library], "code" : [C_Str_Code] } );
+
+		console.log( jsonString );
+
+		var sendServer = function( encrypted ){
+
+			$.ajax({
+			  type: "POST",
+			  url: 'back.php',
+			  data: encrypted,
+			  success: function(){
+			  	console.log("this is successful")
+			  },
+			});	
+
+		};
+
+		var CryptopJSAesJSON = { parse: function (jsonStr) {
+         var j = JSON.parse(jsonStr);
+         var cipherParams = CryptoJS.lib.CipherParams.create({ciphertext: CryptoJS.enc.Base64.parse(j.ct)});
+         if (j.iv) cipherParams.iv = CryptoJS.enc.Hex.parse(j.iv);
+         if (j.s) cipherParams.salt = CryptoJS.enc.Hex.parse(j.s);
+         return cipherParams;
+     	}
+     	}
+
+
+     	function encrypt(){
+     		var message = document.getElementByid("bitch");
+     		document.getElementByid("container").innerHTML = message; 
+     	}
+
+
+	</script> 
+
+
+</body>
+</html>
