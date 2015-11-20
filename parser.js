@@ -53,34 +53,37 @@ var number =
 
 var breakCharacter=
 {
-	'=':true,
-	'+':true,
-	'-':true,
-	'*':true,
-	'/':true,
-	'%':true,
-	'(':true,
-	')':true,
-	'{':true,
-	'}':true,
-	'[':true,
-	']':true,
-	'&':true,
-	'|':true,
-	'!':true,
-	'#':true,
-	'\"':true,
-	'\'':true,
-	' ':true
+	'=':handleBreakCharacter,
+	'+':handleBreakCharacter,
+	'-':handleBreakCharacter,
+	'*':handleBreakCharacter,
+	'/':handleBreakCharacter,
+	'%':handleBreakCharacter,
+	'(':handleBreakCharacter,
+	')':handleBreakCharacter,
+	'{':handleBreakCharacter,
+	'}':handleBreakCharacter,
+	'[':handleBreakCharacter,
+	']':handleBreakCharacter,
+	'&':handleBreakCharacter,
+	'|':handleBreakCharacter,
+	'!':handleBreakCharacter,
+	'#':handleBreakCharacter,
+	'\"':handleBreakCharacter,
+	'\'':handleBreakCharacter,
+	' ':handleBreakCharacter,
 };
 
 var dataArray;
 var buffer;
-var StopParse = 0;
+var character;
+
 var currentWord;
+var currentWordColor = 0;
 
 var currentIndex = 0;
 var currentLine = 0;
+var currentLineIndex = 0;
 
 function Word(startInd, len, color)
 {
@@ -89,28 +92,62 @@ function Word(startInd, len, color)
 	this.color = color;
 }
 
+function handleBreakCharacter(c)
+{
+	character="";
+	keyWord[buffer]; //Call a function to do some work
+	buffer="";
+}
+
+function handleKeyWord(c)
+{
+	buffer.push(c);
+	changeColor(currentLine, currentLineIndex, buffer.length, 2);
+}
+
+function handleType(c)
+{
+	buffer.push(c);
+	changeColor(currentLine, currentLineIndex, buffer.length, 3);
+}
+
+function handleNumber(c)
+{
+	buffer.push(c);
+	if(number[c] && currentWordColor)
+	{
+		changeColor(currentLine, currentLineIndex, 1, 1);
+	}
+	else if(currentWordColor == 1)
+	{
+		changeColor(currentLine, currentLineIndex, buffer.length, 0);
+	}
+}
+
+function changeColor(currentLine, startIndex, length, color)
+{
+
+}
+
+function nextLine(c)
+{
+	return false;
+}
+
 function parseChar(c)
 {
-	if(breakCharacter[c])
+	currentIndex++;
+	character = c;
+	if(nextLine(character))
 	{
-		if(keyWord[buffer])
-		{
-			buffer="";
-			return 2;
-		}
-		else if(type[buffer])
-		{
-			buffer="";
-			return 3;
-		}
+		nextLine++;
+		currentLineIndex = 0;
+		return;
 	}
 
-	buffer.push(c);
+	currentLineIndex++;
 
-	if(number[c])
-		return 1;
-
-	return 0;
+	
 }
 
 
