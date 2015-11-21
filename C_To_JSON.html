@@ -2,8 +2,9 @@
 <html>
 <head>
 	<title>javascript</title>
-	<script type="text/javascript" src="javascript/rsa.js"></script>
-	<script type="text/javascript" src="<?= \RSA\JavascriptHelper::getFrontendUrl(); ?>"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+	</script> 
+	<meta charset="utf-8"/>
                 
 </head>
 <body>
@@ -11,26 +12,20 @@
 	<div class = "container">
 
 	<form name="user" action="<?php back.php ?>" method="POST">
-		Message: <input type = "text" id="bitch" onclick="encrypt" name = "text" />
+		Message: <input type = "text" id="bitch"  name = "text" />
 
-		<input type = "submit" />
+		<input type = "submit" onclick="encrypt()"/>
 	</form> 
 
 	</div>
 
 	<script>	
 
-		var C_Str_Library = "#include<stdio.h> \n";
-		var C_Str_Code = "main(){printf(\"Hello World\");}";
-		var jsonString = JSON.stringify( { "library" : [C_Str_Library], "code" : [C_Str_Code] } );
-
-		console.log( jsonString );
-
 		var sendServer = function( encrypted ){
 
 			$.ajax({
 			  type: "POST",
-			  url: 'back.php',
+			  url: 'back',
 			  data: encrypted,
 			  success: function(){
 			  	console.log("this is successful")
@@ -39,19 +34,12 @@
 
 		};
 
-		var CryptopJSAesJSON = { parse: function (jsonStr) {
-         var j = JSON.parse(jsonStr);
-         var cipherParams = CryptoJS.lib.CipherParams.create({ciphertext: CryptoJS.enc.Base64.parse(j.ct)});
-         if (j.iv) cipherParams.iv = CryptoJS.enc.Hex.parse(j.iv);
-         if (j.s) cipherParams.salt = CryptoJS.enc.Hex.parse(j.s);
-         return cipherParams;
-     	}
-     	}
-
-
      	function encrypt(){
-     		var message = document.getElementByid("bitch");
-     		document.getElementByid("container").innerHTML = message; 
+     	console.log("this is successful");
+		var C_Str_Library = "#include<stdio.h> \n";
+		var C_Str_Code = "main(){printf(\"Hello World\");}";
+		var jsonString = JSON.stringify( { "library" : [C_Str_Library], "code" : [C_Str_Code] } );
+		sendServer( jsonString  );
      	}
 
 
