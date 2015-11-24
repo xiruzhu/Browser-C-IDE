@@ -1,155 +1,163 @@
-var type = 
+var values =
 {
-	char:true,
-	double:true,
-	int:true,
-	long:true,
-	short:true,
-	signed:true,
-	struct:true,
-	union:true,
-	unsigned:true,
-	void:true,
-};
-var keyWord = 
-{
-	auto:true,
-	break:true,
-	case:true,
-	const:true,
-	continue:true,
-	default:true,
-	do:true,
-	else:true,
-	enum:true,
-	extern:true,
-	for:true,
-	goto:true,
-	if:true,
-	register:true,
-	return:true,
-	sizeof:true,
-	static:true,
-	switch:true,
-	typedef:true,
-	unsigned:true,
-	volatile:true,
-	while:true
-};
+	'+':1,
+	'-':1,
+	'*':1,
+	'/':1,
+	'%':1,
+	'++':1,
+	'--':1,
+	'==':1,
+	'!=':1,
+	'>':1,
+	'<':1,
+	'<=':1,
+	'>=':1,
+	'&&':1,
+	'||':1,
+	'!':1,
+	'&':1,
+	'|':1,
+	'^':1,
+	'~':1,
+	'<<':1,
+	'>>':1,
+	'=':1,
+	'+=':1,
+	'-=':1,
+	'*=':1,
+	'/=':1,
+	'%=':1,
+	':':1,
 
-var number =
-{
-	'0':true,
-	'1':true,
-	'2':true,
-	'3':true,
-	'4':true,
-	'5':true,
-	'6':true,
-	'7':true,
-	'8':true,
-	'9':true
-};
-
-var breakCharacter=
-{
-	'=':handleBreakCharacter,
-	'+':handleBreakCharacter,
-	'-':handleBreakCharacter,
-	'*':handleBreakCharacter,
-	'/':handleBreakCharacter,
-	'%':handleBreakCharacter,
-	'(':handleBreakCharacter,
-	')':handleBreakCharacter,
-	'{':handleBreakCharacter,
-	'}':handleBreakCharacter,
-	'[':handleBreakCharacter,
-	']':handleBreakCharacter,
-	'&':handleBreakCharacter,
-	'|':handleBreakCharacter,
-	'!':handleBreakCharacter,
-	'#':handleBreakCharacter,
-	'\"':handleBreakCharacter,
-	'\'':handleBreakCharacter,
-	' ':handleBreakCharacter,
-};
-
-var dataArray;
-var buffer;
-var character;
-
-var currentWord;
-var currentWordColor = 0;
-
-var currentIndex = 0;
-var currentLine = 0;
-var currentLineIndex = 0;
-
-function Word(startInd, len, color)
-{
-	this.startIndex = startInd;
-	this.length = len;
-	this.color = color;
-}
-
-function handleBreakCharacter(c)
-{
-	character="";
-	keyWord[buffer]; //Call a function to do some work
-	buffer="";
-}
-
-function handleKeyWord(c)
-{
-	buffer.push(c);
-	changeColor(currentLine, currentLineIndex, buffer.length, 2);
-}
-
-function handleType(c)
-{
-	buffer.push(c);
-	changeColor(currentLine, currentLineIndex, buffer.length, 3);
-}
-
-function handleNumber(c)
-{
-	buffer.push(c);
-	if(number[c] && currentWordColor)
-	{
-		changeColor(currentLine, currentLineIndex, 1, 1);
-	}
-	else if(currentWordColor == 1)
-	{
-		changeColor(currentLine, currentLineIndex, buffer.length, 0);
-	}
-}
-
-function changeColor(currentLine, startIndex, length, color)
-{
-
-}
-
-function nextLine(c)
-{
-	return false;
-}
-
-function parseChar(c)
-{
-	currentIndex++;
-	character = c;
-	if(nextLine(character))
-	{
-		nextLine++;
-		currentLineIndex = 0;
-		return;
-	}
-
-	currentLineIndex++;
-
+	'\n':2,
+	'(':2,
+	')':2,
+	'{':2,
+	'}':2,
+	'[':2,
+	']':2,
+	'#':2,
+	'\"':2,
+	'\'':2,
+	' ':2,
+	',':2,
 	
+	'0':0,
+	'1':0,
+	'2':0,
+	'3':0,
+	'4':0,
+	'5':0,
+	'6':0,
+	'7':0,
+	'8':0,
+	'9':0,
+	
+	'char':5,
+	'double':5,
+	'int':5,
+	'long':5,
+	'short':5,
+	'signed':5,
+	'struct':5,
+	'union':5,
+	'unsigned':5,
+	'void':5,
+
+	'auto':4,
+	'break':4,
+	'case':4,
+	'const':4,
+	'continue':4,
+	'default':4,
+	'do':4,
+	'else':4,
+	'enum':4,
+	'extern':4,
+	'for':4,
+	'goto':4,
+	'if':4,
+	'register':4,
+	'return':4,
+	'sizeof':4,
+	'static':4,
+	'switch':4,
+	'typedef':4,
+	'volatile':4,
+	'while':4,
+
+};
+
+function error(row, text, errorType){
+	this.row = row;
+	this.text = text;
+	this.errorType = errorType;
+}
+function addLineError(text)
+{
+	this.text += "\n" + error;
+}
+function addError(errList, error){
+	errList[error.row] = error;
+}
+function removeError(error){
+	errList[error.row] = undefined;
+}
+function value(type, name){
+    this.name = name;
+    this.type = type;
+}
+var errorList;
+
+function parseError(line, row){
+	//So the first goal of this is to parse the string
+	if(line.length === 0){
+		errorList[row] = undefined;
+		return errorList;
+	}
+	//error checking
+    var bufferedLine=[];
+	var buf ="";
+	var bufType;
+	var lineError = new error(row, "", 0);
+	//Parses the entire file into blocks split by operators and breakCharacters
+	for(var i = 0; i < line.length; i++){
+	    if(values[line.charAt(i)] > 0){
+	        if(buf.length > 0){
+	             if(isNaN(buf))
+	                bufferedLine.push(new value(values[buf], buf));
+	               else
+	               bufferedLine.push(new value(0, buf));
+	        }
+	        if(line.charAt(i) != ' '){
+	            if(values[line.charAt(i) + "" + line.charAt(i+1)] > 0){
+	                bufferedLine.push(new value(values[line.charAt(i) + "" + line.charAt(i+1)] , line.charAt(i) + "" + line.charAt(i+1)));
+	                i++;
+	            }else
+	                bufferedLine.push(new value(values[line.charAt(i)], line.charAt(i)));
+	        }
+	        buf ="";
+	    }else
+	    buf += line.charAt(i);
+	}
+
+
+    
+
+	if(lineError.text.length > 0){
+		addError(errorList, lineError);
+	}
+	
+	
+	for(i = 0; i < bufferedLine.length; i++)
+    console.log(bufferedLine[i]);
+    
+	return errorList;
+
 }
 
+parseError("struct test *", 1);
 
-
+console.log(!isNaN("20"));
 
