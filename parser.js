@@ -89,11 +89,23 @@ var values =
 
 };
 
+function possibility( operator, number, breakType, type, key)
+{
+	this[1] = operator;
+	this[0] = number;
+	this[2] = breakType;
+	this[4] = key;
+	this[5] = type
+}
+//next System
+
 function error(row, text, errorType){
 	this.row = row;
 	this.text = text;
 	this.errorType = errorType;
 }
+
+
 function addLineError(text)
 {
 	this.text += "\n" + error;
@@ -110,9 +122,9 @@ function value(type, name){
 }
 var errorList;
 
-function parseError(line, row){
+function parseError(line, row, prevRow){
 	//So the first goal of this is to parse the string
-	if(line.length === 0){
+	if(line.length === 0 || row == prevRow){
 		errorList[row] = undefined;
 		return errorList;
 	}
@@ -142,22 +154,50 @@ function parseError(line, row){
 	    buf += line.charAt(i);
 	}
 
-
-    
-
 	if(lineError.text.length > 0){
 		addError(errorList, lineError);
 	}
 	
-	
 	for(i = 0; i < bufferedLine.length; i++)
     console.log(bufferedLine[i]);
     
+
 	return errorList;
 
 }
 
-parseError("struct test *", 1);
+parseError("struct test * jeremy = (char *) malloc(sizeof(struct test *) * BLOCK_SIZE);", 1);
 
-console.log(!isNaN("20"));
+function parseCompilerError(compilerError){
+
+	var index = 0;
+	var colon1;
+	var colon2;
+	var colon3;
+
+    if(compilerError.indexOf("error") < 0 && compilerError.indexOf("error") < 0){
+    //nothing to parse
+    	return errorList;
+	}
+
+	index = compilerError.indexOf("error", index);
+	compilerError.substr(index, compilerError.indexOf("\n", index));
+
+	var colon1 = compilerError.lastIndexOf(':', index) -1;
+	var colon2 = compilerError.lastIndexOf(':', colon1) -1;
+	var colon3 = compilerError.lastIndexOf(':', colon2)+1;
+
+	var value = compilerError.substring(colon3, colon2 + 1);
+
+console.log(value);
+	}
+
+	while(index >= 0){
+		
+	}
+	
+	index = 0;
+	compilerError.indexOf("error", index);
+	compilerError.substr(index, compilerError.indexOf("\n", index));
+}
 
