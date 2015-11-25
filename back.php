@@ -1,13 +1,20 @@
 <?php 
-	
-	class t {
-      public $test = "";
-   	}
 
-   	$a = new t(); 
-   	$a->test = "#"; 
+	// require_once 'include/sqAES.php';
+	// require_once 'include/JCryption.php';
 
-   	$arr = array('Library'=>"#include<stdio.h> \n main(){printf("Hello World");}");
+	// $postBefore = print_r($_POST, true);
+
+	// JCryption::decrypt();
+
+	// header('Content-type: text/plain');
+	// echo "Original POST\n======================\n";
+	// print_r($postBefore);
+	// echo "jCryption example form\n======================\n";
+	// print_r($_POST);
+
+
+   	$arr = array('Library'=>"#include<stdio.h> \n int main(){printf(\"Hello World\"); return 0;}");
    	$json = json_encode($arr);
 
    	$obj = json_decode($json);

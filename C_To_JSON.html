@@ -3,7 +3,12 @@
 <head>
 	<title>javascript</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	</script> 
+	<script type="text/javascript" src="../jquery.jcryption.3.1.0.js"></script>
+	<script type="text/javascript">
+			$(function() {
+				$("name of the form that has the c string/file").jCryption();
+			});
+	</script>
 	<meta charset="utf-8"/>
                 
 </head>
@@ -11,11 +16,12 @@
 
 	<div class = "container">
 
-	<form name="user" action="<?php back.php ?>" method="POST">
+	<!-- <form name="user" method="POST"> -->
 		Message: <input type = "text" id="bitch"  name = "text" />
 
-		<input type = "submit" onclick="encrypt()"/>
-	</form> 
+		<!-- <input type = "submit" onclick="encrypt()"/> -->
+		<button onclick="encrypt()">Click me</button>
+	<!-- </form>  -->
 
 	</div>
 
@@ -35,11 +41,28 @@
 		};
 
      	function encrypt(){
-     	console.log("this is successful");
-		var C_Str_Library = "#include<stdio.h> \n";
-		var C_Str_Code = "main(){printf(\"Hello World\");}";
-		var jsonString = JSON.stringify( { "library" : [C_Str_Library], "code" : [C_Str_Code] } );
-		sendServer( jsonString  );
+
+     		var string = '#include<stdio.h> \n int main(){printf(\"Hello World\"); return 0;}';
+     		Tommyparse(string);
+     	}
+
+
+     	function Tommyparse( string ){
+     		var parsedCode =""; 
+     		var slash = '\\';
+     		var newLine = '\n';
+     		for(var i=0; i<string.length ; i++){
+     			if(string[i] == '>'){
+     				parsedCode += string[i];
+     				parsedCode += newLine; 
+     				i++;
+     			}
+     			if( string[i] == '"'){
+     				parsedCode += slash;	
+     			} 
+     			parsedCode += string[i];
+     		}
+     		console.log(parsedCode);
      	}
 
 
