@@ -3,7 +3,8 @@
 <head>
 	<title>javascript</title>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-	</script> 
+	<script type="text/javascript" src="../jquery.jcryption.3.1.0.js"></script>
+
 	<meta charset="utf-8"/>
                 
 </head>
@@ -11,35 +12,69 @@
 
 	<div class = "container">
 
-	<form name="user" action="<?php back.php ?>" method="POST">
+<!-- 	<form name="user" method="POST" action=http://cs.mcgill.ca/~jluo15/Browser-C-IDE/back.php >
+ -->	
 		Message: <input type = "text" id="bitch"  name = "text" />
 
-		<input type = "submit" onclick="encrypt()"/>
-	</form> 
-
+		<!-- <input type = "submit" onclick="encrypt()"/> -->
+		<button onclick="sendServer()">Click me</button>
+<!-- 	</form> 
+ -->
 	</div>
 
 	<script>	
 
-		var sendServer = function( encrypted ){
+		var sendServer = function( ){
 
 			$.ajax({
 			  type: "POST",
-			  url: 'back',
-			  data: encrypted,
-			  success: function(){
-			  	console.log("this is successful")
+			  url: 'http://cs.mcgill.ca/~jluo15/Browser-C-IDE/back.php',
+			  data: {
+			  	code : Tommyparse('#include<stdio.h> \n int main(){printf(\"Hello World\"); return 0;}')
 			  },
+			  crossDomain: true, 
+			  dataType: "json",
+			  success: function(responseData, textStatus, jqXHR)
+			    {
+			        console.log(responseData);
+			        console.log('success');
+			    },
+			    error: function (responseData, textStatus, errorThrown)
+			    {
+			        console.log('error');
+			    }
 			});	
 
 		};
 
-     	function encrypt(){
-     	console.log("this is successful");
-		var C_Str_Library = "#include<stdio.h> \n";
-		var C_Str_Code = "main(){printf(\"Hello World\");}";
-		var jsonString = JSON.stringify( { "library" : [C_Str_Library], "code" : [C_Str_Code] } );
-		sendServer( jsonString  );
+     	// function encrypt(){
+
+     	// 	var string = '#include<stdio.h> \n int main(){printf(\"Hello World\"); return 0;}';
+     	// 	Tommyparse(string);
+     	// 	var test = "shit";
+     	// 	sendServer(test);
+     	// }
+
+   
+
+
+     	function Tommyparse( string ){
+     		var parsedCode =""; 
+     		var slash = '\\';
+     		var newLine = '\n';
+     		for(var i=0; i<string.length ; i++){
+     			if(string[i] == '>'){
+     				parsedCode += string[i];
+     				parsedCode += newLine; 
+     				i++;
+     			}
+     			if( string[i] == '"'){
+     				parsedCode += slash;	
+     			} 
+     			parsedCode += string[i];
+     		}
+     		//console.log(parsedCode);
+     		return parsedCode;
      	}
 
 
