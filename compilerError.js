@@ -1,6 +1,10 @@
 var errorList = [];
-function error(row, text, errorType){
+var warningList = [];
+
+function error(row, col, length, text, errorType){
 	this.row = row;
+	this.col = col;
+	this.length = length;
 	this.text = text;
 	this.errorType = errorType;
 }
@@ -20,7 +24,7 @@ function value(type, name){
     this.type = type;
 }
 
-function parseCompilerError(text, errorList){
+function parseCompilerError(text, errorList, warningList){
     
     if(text.search("gcc: error:") === 0){
         return errorList;
@@ -29,15 +33,34 @@ function parseCompilerError(text, errorList){
     var lines = text.split('\n');
 	var index = 0;
 	var row = 0;
+	var col = 0;
+	var length;
 	var err;
 
 	for(var i = 0; i < lines.length; i++){
 	    index = lines[i].indexOf(": error:");
 	    if(index >= 0){
 	        //There is an error on this line
-	        row = parseInt(lines[i].substr(fileName.length, lines[i].indexOf(':', fileName.length+1)));
-	        err = new error(row, lines[i], 0);
+	        col = lines[i].indexOf(':', fileName.length+1);
+	        row = parseInt(lines[i].substr(fileName.length, col));
+	        length = lines[i].indexOf(':', col+1);
+	        length = lines[i].length - length;
+	        col = parseInt(lines[i].substr(col + 1, length));
+	        err = new error(row, col,length, lines[i], 0);
 	        addError(errorList,  err);
+	    }
+	}
+
+	for(var i = 0; i < lines.length; i++){
+	    index = lines[i].indexOf(": warning:");
+	    if(index >= 0){
+	        //There is an error on this line
+	        col = lines[i].indexOf(':', fileName.length+1);
+	        row = parseInt(lines[i].substr(fileName.length, col));
+
+	        col = parseInt(lines[i].substr(col + 1, lines[i].indexOf(':', col+1)));
+	        err = new error(row, col, length, lines[i], 0);
+	        addError(warningList,  err);
 	        
 	    }
 	}
