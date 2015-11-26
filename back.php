@@ -4,41 +4,38 @@
 			header('Access-Control-Max-Age: 1000');
 			header('Access-Control-Allow-Headers: Content-Type');
 
-			error_reporting( E_ALL ); 
-			ini_set('log_errors', '1'); 
-			ini_set('error_log', './error.txt');
+			ini_set('display_errors', 1);
+			ini_set('display_startup_errors', 1);
+			error_reporting(E_ALL);
 
 			$data = json_encode(array("your_request_was" => $_POST['code']));
 			//echo $data;
-			shell_exec('php compile.php');
+			//$Code = $_Post['code'];
+			//$data = "#include<stdio.h> \n int main(){printf(\"Hello World\"); return 0;}";
 
+			//$codee = json_encode(array("code_so_far:" => $Code));
+			//echo $codee;
 
-			echo $data;
-			//$something = json_encode(array("blahblah" => "wew"));
-			// echo $something;
+			$file = "userProgram.c";
+			file_put_contents($file, $_POST['code'] , LOCK_EX);
+
+			$process = proc_open("gcc userProgram.c",
+			    array(
+			        1 => array("pipe", "w"),  //stdout
+			        2 => array("pipe", "w")   // stderr
+			    ), $pipes);
+
+			//sleep(2);
+			$output = exec("./a.out 2>&1");
 			
-			 // $data = "#include<stdio.h> \n int main(){printf(\"Hello World\"); return 0;}";
-
-			// lock to prevent anyone else to write 
-			// to file at the same time, extra safety
-			$file = 'userProgram.c';
-			file_put_contents($file, $data, FILE_APPEND | LOCK_EX); 
 			
-			//echo json_encode(array("this_is_your_request" => exec('php compile.php')));
-			 //if( $consoleMsg ){
+			while(strpos($output, "not found")){
+				sleep(1);
+				$output = exec("./a.out 2>&1");
+			}
+			// //echo $output;
 
-//			$output = shell_exec('./jeremysucks');
-			//$arr = array('error1' => consoleMsg, 'error2' => output );
- 			 //$json = json_encode($arr);
+			$json = json_encode(array('Compiler Error:' => stream_get_contents($pipes[2]), 'Output:' => $output));
+			echo $json;
 
-//			$last_line = system('ls', $retval);
-
-//			echo $last_line;			
-			 
-//			$return = json_encode(array("this_is_your_request" => "asjdsajda"));
-			//print $arr;
-			//echo $return;
-			// file_put_contents("./test.txt", $json);
-
-		//	echo $json;
 ?> 	

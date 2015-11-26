@@ -28,35 +28,31 @@
 
 			$.ajax({
 			  type: "POST",
-			  url: 'http://cs.mcgill.ca/~jluo15/Browser-C-IDE/back.php',
+			  url: 'back.php',
 			  data: {
-			  	code : Tommyparse('#include<stdio.h> \n int main(){printf(\"Hello World\"); return 0;}')
+			  	code : Tommyparse('#include<stdio.h> \nint main(){printf("Hello World not"); return 0;}')
 			  },
 			  crossDomain: true, 
 			  dataType: "json",
-			  success: function(responseData, textStatus, jqXHR)
+			  success: function(data)
 			    {
-			        console.log(responseData);
-			        console.log('success');
+			        console.log(data);
+			        //console.log('success');
 			    },
 			    error: function (responseData, textStatus, errorThrown)
 			    {
 			        console.log('error');
+			        alert("this is the response data: " + responseData + " also error: " + errorThrown);
 			    }
 			});	
 
 		};
 
-     	// function encrypt(){
 
-     	// 	var string = '#include<stdio.h> \n int main(){printf(\"Hello World\"); return 0;}';
-     	// 	Tommyparse(string);
-     	// 	var test = "shit";
-     	// 	sendServer(test);
-     	// }
-
-   
-
+     	function testParse( ){
+     		var bitch = '#include<stdio.h> int main(){printf("Hello World bitch"); return 0;}';
+     		alert(Tommyparse(bitch));
+     	}
 
      	function Tommyparse( string ){
      		var parsedCode =""; 
@@ -68,9 +64,9 @@
      				parsedCode += newLine; 
      				i++;
      			}
-     			if( string[i] == '"'){
-     				parsedCode += slash;	
-     			} 
+     			// if( string[i] == '"'){
+     			// 	parsedCode += slash;	
+     			// } 
      			parsedCode += string[i];
      		}
      		//console.log(parsedCode);

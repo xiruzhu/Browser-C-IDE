@@ -12,13 +12,11 @@ error_reporting(E_ALL);
 	file_put_contents($myfile, $data, LOCK_EX);
 
 
-	$process = proc_open('gcc -Wall -o malloc malloc.c',
+	$process = proc_open('gcc -Wall -o jeremysucks malloc.c',
     array(
         1 => array("pipe", "w"),  //stdout
         2 => array("pipe", "w")   // stderr
     ), $pipes);
-
-	echo stream_get_contents($pipes[2]);
 
 	$output = exec("./malloc 2>&1");
 

@@ -1,2 +1,3 @@
-#include<stdio.h> 
- int maijn(){printf("Hello World"); return 0;}
+#include<stdio.h>
+ 
+int main(){printf("Hello World not"); return 0;}
