@@ -18,8 +18,9 @@
 
 			$file = "userProgram.c";
 			file_put_contents($file, $_POST['code'] , LOCK_EX);
+			$command = $_POST['command'];
 
-			$process = proc_open("gcc userProgram.c",
+			$process = proc_open($command,
 			    array(
 			        1 => array("pipe", "w"),  //stdout
 			        2 => array("pipe", "w")   // stderr
